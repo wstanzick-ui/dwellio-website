@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dwellio — Sign Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #1b3f7c;
+  --navy-dark: #112a56;
+  --navy-light: #2a5399;
+  --green: #3ecf82;
+  --green-dark: #2aad68;
+  --cream: #f8f6f1;
+  --white: #ffffff;
+  --gray: #6b7280;
+  --gray-light: #f3f4f6;
+  --border: #e5e7eb;
+  --text: #111827;
+  --text-muted: #6b7280;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* PAGE SYSTEM */
+.page { display: none; min-height: 100vh; }
+.page.active { display: flex; flex-direction: column; }
+
+/* NAV */
+.topnav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 64px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; cursor: pointer; }
+.nav-logo-icon {
+  width: 32px; height: 32px; background: var(--navy);
+  border-radius: 9px; display: flex; align-items: center; justify-content: center;
+}
+.nav-logo-text { font-size: 17px; font-weight: 700; color: var(--navy); }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-link { font-size: 14px; color: var(--gray); text-decoration: none; cursor: pointer; }
+.nav-link:hover { color: var(--navy); }
+.nav-btn {
+  background: var(--navy); color: white;
+  padding: 9px 20px; border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
+}
+.nav-btn:hover { background: var(--navy-dark); }
+.nav-btn.outline {
+  background: transparent; color: var(--navy);
+  border: 1px solid var(--border);
+}
+.nav-btn.outline:hover { background: var(--gray-light); }
+
+/* AUTH PAGES */
+.auth-wrap {
+  flex: 1; display: flex;
+  min-height: calc(100vh - 64px);
+}
+.auth-left {
+  width: 480px; flex-shrink: 0;
+  padding: 60px 64px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.auth-right {
+  flex: 1;
+  background: var(--navy-dark);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.auth-right::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.auth-right::after {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(62,207,130,0.15) 0%, transparent 70%);
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.auth-right-content {
+  position: relative; z-index: 1;
+  text-align: center; padding: 40px;
+}
+.auth-right-content h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 36px; color: white; margin-bottom: 14px; font-weight: 400;
+}
+.auth-right-content p { font-size: 15px; color: rgba(255,255,255,0.6); max-width: 320px; line-height: 1.7; }
+.auth-stat {
+  margin-top: 40px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px; padding: 24px 28px;
+  text-align: left;
+}
+.auth-stat-num { font-family: 'Instrument Serif', serif; font-size: 44px; color: var(--green); }
+.auth-stat-label { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 4px; line-height: 1.5; }
+
+.auth-title { font-family: 'Instrument Serif', serif; font-size: 32px; font-weight: 400; margin-bottom: 6px; }
+.auth-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 36px; }
+.auth-sub a { color: var(--navy); font-weight: 600; text-decoration: none; cursor: pointer; }
+
+.form-group { margin-bottom: 18px; }
+.form-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: block; }
+.form-input {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text); outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--navy); }
+.form-input::placeholder { color: #bbb; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-hint { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+
+.submit-btn {
+  width: 100%; padding: 14px;
+  background: var(--navy); color: white;
+  border: none; border-radius: 10px;
+  font-size: 15px; font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer; margin-top: 8px;
+  transition: background 0.2s, transform 0.15s;
+}
+.submit-btn:hover { background: var(--navy-dark); transform: translateY(-1px); }
+.submit-btn.green { background: var(--green); color: #0a2a1a; }
+.submit-btn.green:hover { background: var(--green-dark); }
+
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 20px 0; color: var(--text-muted); font-size: 13px;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.google-btn {
+  width: 100%; padding: 12px;
+  background: white; color: var(--text);
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-size: 14px; font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: background 0.2s;
+}
+.google-btn:hover { background: var(--gray-light); }
+.terms { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 16px; line-height: 1.6; }
+.terms a { color: var(--navy); }
+
+/* DASHBOARD */
+.dash-wrap {
+  display: flex; flex: 1; min-height: calc(100vh - 64px);
+}
+.dash-sidebar {
+  width: 240px; flex-shrink: 0;
+  background: var(--navy-dark);
+  padding: 28px 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.dash-sidebar-logo {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 8px; margin-bottom: 24px;
+}
+.dash-sidebar-logo-box {
+  width: 28px; height: 28px; background: rgba(255,255,255,0.15);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+}
+.dash-sidebar-logo-text { font-size: 15px; font-weight: 700; color: white; }
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 9px;
+  font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.55);
+  cursor: pointer; transition: all 0.15s;
+}
+.sidebar-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.9); }
+.sidebar-item.active { background: rgba(255,255,255,0.1); color: white; }
+.sidebar-item svg { flex-shrink: 0; }
+.sidebar-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 12px 0; }
+.sidebar-bottom { margin-top: auto; }
+.sidebar-user {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 12px;
+}
+.user-avatar {
+  width: 32px; height: 32px; background: var(--green);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: #0a2a1a; flex-shrink: 0;
+}
+.user-name { font-size: 12px; font-weight: 600; color: white; }
+.user-email { font-size: 10px; color: rgba(255,255,255,0.4); }
+
+.dash-main { flex: 1; background: #f6f7f9; overflow-y: auto; }
+.dash-header {
+  background: white; padding: 20px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.dash-header-title { font-size: 20px; font-weight: 700; color: var(--text); }
+.dash-header-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.add-device-btn {
+  background: var(--navy); color: white;
+  padding: 10px 20px; border-radius: 9px;
+  font-size: 13px; font-weight: 600;
+  border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 8px;
+  transition: background 0.2s;
+}
+.add-device-btn:hover { background: var(--navy-dark); }
+
+.dash-body { padding: 28px 32px; }
+
+/* Stats row */
+.dash-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+.dash-stat-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px 20px;
+}
+.dsc-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.dsc-num { font-family: 'Instrument Serif', serif; font-size: 32px; color: var(--navy); line-height: 1; }
+.dsc-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.dsc-badge {
+  display: inline-block; padding: 2px 8px;
+  border-radius: 20px; font-size: 10px; font-weight: 600; margin-top: 6px;
+}
+.badge-green { background: #e5f7ed; color: #1a7a42; }
+.badge-orange { background: #fff3e0; color: #c85a00; }
+.badge-red { background: #fef2f2; color: #991b1b; }
+.badge-blue { background: #eff6ff; color: #1d4ed8; }
+
+/* Device grid */
+.section-header-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px;
+}
+.section-header-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.section-header-link { font-size: 13px; color: var(--navy); cursor: pointer; font-weight: 500; }
+
+.device-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+.device-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+}
+.device-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+.device-card-img {
+  height: 100px; background: #f4f6fb;
+  display: flex; align-items: center; justify-content: center;
+}
+.device-card-body { padding: 14px 16px; }
+.device-card-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.device-card-model { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+.device-card-badge {
+  display: inline-flex; padding: 3px 9px;
+  border-radius: 20px; font-size: 10px; font-weight: 600; margin-bottom: 8px;
+}
+.device-card-note { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+
+/* Add device empty card */
+.device-card-add {
+  background: white; border: 2px dashed var(--border);
+  border-radius: 16px; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; cursor: pointer; padding: 24px;
+  transition: border-color 0.2s, background 0.2s; min-height: 200px;
+}
+.device-card-add:hover { border-color: var(--navy); background: #f8faff; }
+.device-card-add-icon {
+  width: 44px; height: 44px; background: var(--gray-light);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.device-card-add-text { font-size: 13px; font-weight: 600; color: var(--navy); }
+.device-card-add-sub { font-size: 11px; color: var(--text-muted); text-align: center; }
+
+/* Maintenance section */
+.maint-list { display: flex; flex-direction: column; gap: 10px; }
+.maint-item {
+  background: white; border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 18px;
+  display: flex; align-items: center; gap: 14px;
+}
+.maint-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.maint-info { flex: 1; }
+.maint-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.maint-device { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.maint-action {
+  font-size: 12px; font-weight: 600; color: var(--navy);
+  background: #eff6ff; padding: 6px 14px; border-radius: 7px;
+  cursor: pointer; border: none; font-family: 'DM Sans', sans-serif;
+}
+
+/* ADD DEVICE FLOW */
+.add-device-wrap {
+  flex: 1; display: flex; min-height: calc(100vh - 64px);
+}
+.add-device-sidebar {
+  width: 280px; flex-shrink: 0;
+  background: var(--navy-dark); padding: 48px 36px;
+  display: flex; flex-direction: column;
+}
+.add-device-sidebar h3 { font-family: 'Instrument Serif', serif; font-size: 22px; color: white; font-weight: 400; margin-bottom: 8px; }
+.add-device-sidebar p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 36px; }
+.steps-list { display: flex; flex-direction: column; gap: 0; }
+.step-item {
+  display: flex; align-items: flex-start; gap: 12px; padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  position: relative;
+}
+.step-circle {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  border: 2px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.4);
+}
+.step-circle.done { background: var(--green); border-color: var(--green); color: #0a2a1a; }
+.step-circle.current { background: white; border-color: white; color: var(--navy); }
+.step-label { font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 500; margin-top: 4px; }
+.step-label.current { color: white; }
+.step-label.done { color: rgba(255,255,255,0.7); }
+
+.add-device-main {
+  flex: 1; background: #f6f7f9;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 48px 32px;
+  overflow-y: auto;
+}
+.add-device-form {
+  background: white; border: 1px solid var(--border);
+  border-radius: 20px; padding: 40px;
+  width: 100%; max-width: 560px;
+}
+.add-device-form h2 { font-family: 'Instrument Serif', serif; font-size: 28px; font-weight: 400; margin-bottom: 6px; }
+.add-device-form p { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; line-height: 1.6; }
+
+/* Category chips */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.chip {
+  padding: 8px 16px; border-radius: 20px;
+  font-size: 13px; font-weight: 500;
+  border: 1.5px solid var(--border); cursor: pointer;
+  background: white; color: var(--text);
+  transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+}
+.chip:hover { border-color: var(--navy); color: var(--navy); }
+.chip.selected { background: var(--navy); border-color: var(--navy); color: white; }
+
+/* Select */
+.form-select {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px; font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text); outline: none;
+  background: white; cursor: pointer;
+  transition: border-color 0.2s; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+.form-select:focus { border-color: var(--navy); }
+
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* Photo upload */
+.photo-upload {
+  border: 2px dashed var(--border); border-radius: 12px;
+  padding: 32px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  margin-top: 6px;
+}
+.photo-upload:hover { border-color: var(--navy); background: #f8faff; }
+.photo-upload-icon {
+  width: 48px; height: 48px; background: var(--gray-light);
+  border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+}
+.photo-upload-text { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.photo-upload-sub { font-size: 12px; color: var(--text-muted); }
+
+/* Form nav buttons */
+.form-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.btn-back {
+  padding: 11px 22px; border-radius: 9px;
+  font-size: 14px; font-weight: 600;
+  border: 1.5px solid var(--border); background: white; color: var(--text);
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
+}
+.btn-back:hover { background: var(--gray-light); }
+.btn-next {
+  padding: 11px 28px; border-radius: 9px;
+  font-size: 14px; font-weight: 600;
+  border: none; background: var(--navy); color: white;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-next:hover { background: var(--navy-dark); transform: translateY(-1px); }
+.btn-next.green { background: var(--green); color: #0a2a1a; }
+
+/* Success state */
+.success-wrap {
+  text-align: center; padding: 20px;
+}
+.success-icon {
+  width: 72px; height: 72px; background: #e5f7ed;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+}
+.success-title { font-family: 'Instrument Serif', serif; font-size: 28px; font-weight: 400; margin-bottom: 10px; }
+.success-sub { font-size: 15px; color: var(--text-muted); line-height: 1.6; max-width: 380px; margin: 0 auto 32px; }
+.success-card {
+  background: var(--gray-light); border-radius: 14px; padding: 20px 24px;
+  display: flex; align-items: center; gap: 16px; text-align: left; margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .auth-right { display: none; }
+  .auth-left { width: 100%; padding: 40px 24px; }
+  .dash-sidebar { display: none; }
+  .add-device-sidebar { display: none; }
+  .device-grid { grid-template-columns: 1fr 1fr; }
+  .dash-stats { grid-template-columns: 1fr 1fr; }
+  .topnav { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ -->
+<!-- PAGE: SIGN UP                       -->
+<!-- ═══════════════════════════════════ -->
+<div class="page active" id="page-signup">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="goHome()">
+      <div class="nav-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 9.5L10 4l7 5.5V17a.8.8 0 01-.8.8H13v-4a3 3 0 00-6 0v4H3.8A.8.8 0 013 17V9.5z" fill="white" opacity="0.9"/><path d="M7.5 5.5c1.2-1.2 3.3-1.2 4.5 0" stroke="white" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.65"/><circle cx="10" cy="5.8" r="0.9" fill="white" opacity="0.85"/></svg>
+      </div>
+      <span class="nav-logo-text">Dwellio</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-link" onclick="showPage('page-login')">Already have an account?</span>
+      <button class="nav-btn" onclick="showPage('page-login')">Log in</button>
+    </div>
+  </nav>
+  <div class="auth-wrap">
+    <div class="auth-left">
+      <div class="auth-title">Create your account</div>
+      <div class="auth-sub">Start managing everything you own. <a onclick="showPage('page-login')">Already have an account? Log in</a></div>
+
+      <button class="google-btn" onclick="showPage('page-dashboard')">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.706A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.962L3.964 6.294C4.672 4.167 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="divider">or sign up with email</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First name</label>
+          <input class="form-input" type="text" placeholder="William"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last name</label>
+          <input class="form-input" type="text" placeholder="Stanzick"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input class="form-input" type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" placeholder="At least 8 characters"/>
+        <div class="form-hint">Must include uppercase, lowercase, and a number.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm password</label>
+        <input class="form-input" type="password" placeholder="Re-enter your password"/>
+      </div>
+
+      <button class="submit-btn green" onclick="showPage('page-add-device')">Create account</button>
+      <div class="terms">By signing up you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</div>
+    </div>
+    <div class="auth-right">
+      <div class="auth-right-content">
+        <h2>Own everything smarter.</h2>
+        <p>Join thousands of homeowners who never lose track of a warranty, manual, or maintenance schedule again.</p>
+        <div class="auth-stat">
+          <div class="auth-stat-num">78%</div>
+          <div class="auth-stat-label">of consumers want to solve product problems independently — Dwellio makes it possible.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- PAGE: LOG IN                        -->
+<!-- ═══════════════════════════════════ -->
+<div class="page" id="page-login">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="goHome()">
+      <div class="nav-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 9.5L10 4l7 5.5V17a.8.8 0 01-.8.8H13v-4a3 3 0 00-6 0v4H3.8A.8.8 0 013 17V9.5z" fill="white" opacity="0.9"/><path d="M7.5 5.5c1.2-1.2 3.3-1.2 4.5 0" stroke="white" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.65"/><circle cx="10" cy="5.8" r="0.9" fill="white" opacity="0.85"/></svg>
+      </div>
+      <span class="nav-logo-text">Dwellio</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-link" onclick="showPage('page-signup')">Don't have an account?</span>
+      <button class="nav-btn" onclick="showPage('page-signup')">Sign up free</button>
+    </div>
+  </nav>
+  <div class="auth-wrap">
+    <div class="auth-left">
+      <div class="auth-title">Welcome back</div>
+      <div class="auth-sub">Log in to your Dwellio account. <a onclick="showPage('page-signup')">Need an account? Sign up free</a></div>
+
+      <button class="google-btn" onclick="showPage('page-dashboard')">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.706A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.962L3.964 6.294C4.672 4.167 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="divider">or log in with email</div>
+
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input class="form-input" type="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" placeholder="Your password"/>
+        <div class="form-hint"><a href="#" style="color:var(--navy);font-weight:600;">Forgot your password?</a></div>
+      </div>
+
+      <button class="submit-btn" onclick="showPage('page-dashboard')">Log in</button>
+    </div>
+    <div class="auth-right">
+      <div class="auth-right-content">
+        <h2>Everything you own, organised.</h2>
+        <p>Manuals, warranties, maintenance reminders and AI support — all in one place for every product in your home.</p>
+        <div class="auth-stat">
+          <div class="auth-stat-num">14%</div>
+          <div class="auth-stat-label">of support issues get resolved through self-service today. Dwellio is built to fix that.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- PAGE: DASHBOARD                     -->
+<!-- ═══════════════════════════════════ -->
+<div class="page" id="page-dashboard">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="goHome()">
+      <div class="nav-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 9.5L10 4l7 5.5V17a.8.8 0 01-.8.8H13v-4a3 3 0 00-6 0v4H3.8A.8.8 0 013 17V9.5z" fill="white" opacity="0.9"/><path d="M7.5 5.5c1.2-1.2 3.3-1.2 4.5 0" stroke="white" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.65"/><circle cx="10" cy="5.8" r="0.9" fill="white" opacity="0.85"/></svg>
+      </div>
+      <span class="nav-logo-text">Dwellio</span>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn" onclick="showPage('page-add-device')">+ Add device</button>
+      <button class="nav-btn outline" onclick="showPage('page-login')">Log out</button>
+    </div>
+  </nav>
+  <div class="dash-wrap">
+    <div class="dash-sidebar">
+      <div class="dash-sidebar-logo">
+        <div class="dash-sidebar-logo-box">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M3 9.5L10 4l7 5.5V17a.8.8 0 01-.8.8H13v-4a3 3 0 00-6 0v4H3.8A.8.8 0 013 17V9.5z" fill="white" opacity="0.9"/></svg>
+        </div>
+        <span class="dash-sidebar-logo-text">Dwellio</span>
+      </div>
+      <div class="sidebar-item active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="white" stroke-width="1.6" fill="none"/><rect x="9" y="13" width="6" height="8" rx="1" stroke="white" stroke-width="1.4" fill="none"/></svg>
+        My Library
+      </div>
+      <div class="sidebar-item" onclick="showPage('page-add-device')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.5)" stroke-width="1.6"/><path d="M12 8v8M8 12h8" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Add Device
+      </div>
+      <div class="sidebar-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,0.5)" stroke-width="1.6"/><path d="M12 7v5l3 3" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" stroke-linecap="round"/></svg>
+        Maintenance
+      </div>
+      <div class="sidebar-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke="rgba(255,255,255,0.5)" stroke-width="1.6" fill="none"/></svg>
+        AI Support
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2h3.5a2 2 0 012 2v.5" stroke="rgba(255,255,255,0.5)" stroke-width="1.4"/><path d="M2 9h20M2 9V19a2 2 0 002 2h16a2 2 0 002-2V9M2 9V7a2 2 0 012-2h16a2 2 0 012 2v2" stroke="rgba(255,255,255,0.5)" stroke-width="1.4"/></svg>
+        Warranties
+      </div>
+      <div class="sidebar-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z" stroke="rgba(255,255,255,0.5)" stroke-width="1.4" fill="none"/><path d="M8 10h8M8 14h5" stroke="rgba(255,255,255,0.5)" stroke-width="1.4" stroke-linecap="round"/></svg>
+        Manuals
+      </div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="user-avatar">W</div>
+          <div>
+            <div class="user-name">William S.</div>
+            <div class="user-email">william@dwellio.com</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dash-main">
+      <div class="dash-header">
+        <div>
+          <div class="dash-header-title">My Library</div>
+          <div class="dash-header-sub">4 devices · 1 action needed</div>
+        </div>
+        <button class="add-device-btn" onclick="showPage('page-add-device')">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v10M2 7h10" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Add device
+        </button>
+      </div>
+      <div class="dash-body">
+
+        <!-- Stats -->
+        <div class="dash-stats">
+          <div class="dash-stat-card">
+            <div class="dsc-label">Total devices</div>
+            <div class="dsc-num">4</div>
+            <div class="dsc-sub">In your library</div>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dsc-label">Active warranties</div>
+            <div class="dsc-num">3</div>
+            <span class="dsc-badge badge-green">All good</span>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dsc-label">Expiring soon</div>
+            <div class="dsc-num">1</div>
+            <span class="dsc-badge badge-orange">Dyson V8</span>
+          </div>
+          <div class="dash-stat-card">
+            <div class="dsc-label">Maintenance due</div>
+            <div class="dsc-num">1</div>
+            <span class="dsc-badge badge-red">This month</span>
+          </div>
+        </div>
+
+        <!-- Devices -->
+        <div class="section-header-row">
+          <div class="section-header-title">Your devices</div>
+          <div class="section-header-link">Manage all</div>
+        </div>
+        <div class="device-grid">
+
+          <!-- LG Fridge -->
+          <div class="device-card">
+            <div class="device-card-img">
+              <svg viewBox="0 0 80 100" fill="none" width="60" height="75"><rect x="10" y="5" width="60" height="90" rx="5" fill="#c8cdd6" stroke="#a0a8b5" stroke-width="1"/><rect x="10" y="5" width="60" height="48" rx="5" fill="#d8dde6" stroke="#a0a8b5" stroke-width="1"/><rect x="11" y="51" width="58" height="1.5" fill="#a0a8b5"/><rect x="55" y="14" width="5" height="22" rx="2" fill="#8a9ab0"/><rect x="55" y="58" width="5" height="22" rx="2" fill="#8a9ab0"/></svg>
+            </div>
+            <div class="device-card-body">
+              <div class="device-card-name">LG Refrigerator</div>
+              <div class="device-card-model">LFXS26973 · French Door</div>
+              <span class="device-card-badge badge-green">Warranty: Active</span>
+              <div class="device-card-note">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#f59e0b" stroke-width="1"/><path d="M6 4v2.5L7.5 8" stroke="#f59e0b" stroke-width="1" stroke-linecap="round"/></svg>
+                Water filter due May 28
+              </div>
+            </div>
+          </div>
+
+          <!-- Dyson -->
+          <div class="device-card">
+            <div class="device-card-img" style="background:#f0f4ff;">
+              <svg viewBox="0 0 60 80" fill="none" width="40" height="55"><rect x="25" y="5" width="10" height="50" rx="5" fill="#4a6fa5" stroke="#2d4e80" stroke-width="1"/><ellipse cx="30" cy="62" rx="14" ry="10" fill="#3a5c94" stroke="#2d4e80" stroke-width="1"/><rect x="22" y="28" width="16" height="8" rx="2" fill="#2d4e80"/></svg>
+            </div>
+            <div class="device-card-body">
+              <div class="device-card-name">Dyson V8 Animal</div>
+              <div class="device-card-model">SV10 · Cordless Vacuum</div>
+              <span class="device-card-badge badge-orange">Warranty: Expiring Soon</span>
+              <div class="device-card-note">
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#f59e0b" stroke-width="1"/><path d="M6 4v2.5L7.5 8" stroke="#f59e0b" stroke-width="1" stroke-linecap="round"/></svg>
+                Clean filter in 15 days
+              </div>
+            </div>
+          </div>
+
+          <!-- Bosch -->
+          <div class="device-card">
+            <div class="device-card-img">
+              <svg viewBox="0 0 70 70" fill="none" width="55" height="55"><rect x="8" y="8" width="54" height="54" rx="5" fill="#d0d4dc" stroke="#b0b5bf" stroke-width="1"/><rect x="8" y="8" width="54" height="16" rx="5" fill="#bcc1cb"/><rect x="16" y="28" width="38" height="28" rx="3" fill="#c4c9d4"/><circle cx="50" cy="16" r="4" fill="#f0f2f6" stroke="#9aa0aa" stroke-width="0.8"/></svg>
+            </div>
+            <div class="device-card-body">
+              <div class="device-card-name">Bosch Dishwasher</div>
+              <div class="device-card-model">SHEM3AY52N · Built-in</div>
+              <span class="device-card-badge badge-green">Warranty: Active</span>
+              <div class="device-card-note" style="color:#9ca3af;">All up to date</div>
+            </div>
+          </div>
+
+          <!-- GE Washer -->
+          <div class="device-card">
+            <div class="device-card-img" style="background:#f9fafb;">
+              <svg viewBox="0 0 70 70" fill="none" width="55" height="55"><rect x="8" y="8" width="54" height="54" rx="5" fill="#d6d8de" stroke="#b8bac2" stroke-width="1"/><rect x="8" y="8" width="54" height="16" rx="5" fill="#c8cad2"/><circle cx="35" cy="44" r="15" fill="#bfc2ca" stroke="#9ea1aa" stroke-width="1"/><circle cx="35" cy="44" r="9" fill="#d4d7df" stroke="#9ea1aa" stroke-width="0.8"/><circle cx="35" cy="44" r="3.5" fill="#a8acb5"/></svg>
+            </div>
+            <div class="device-card-body">
+              <div class="device-card-name">GE Washing Machine</div>
+              <div class="device-card-model">GFW550SSNWW · Front Load</div>
+              <span class="device-card-badge badge-blue">Upgrade available</span>
+              <div class="device-card-note" style="color:#9ca3af;">All up to date</div>
+            </div>
+          </div>
+
+          <!-- Add new -->
+          <div class="device-card-add" onclick="showPage('page-add-device')">
+            <div class="device-card-add-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="#6b7280" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <div class="device-card-add-text">Add a device</div>
+            <div class="device-card-add-sub">Track warranties, manuals and maintenance for any appliance or product</div>
+          </div>
+        </div>
+
+        <!-- Maintenance -->
+        <div class="section-header-row">
+          <div class="section-header-title">Upcoming maintenance</div>
+          <div class="section-header-link">View all</div>
+        </div>
+        <div class="maint-list">
+          <div class="maint-item">
+            <div class="maint-icon" style="background:#fff3e0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="#f59e0b" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div class="maint-info">
+              <div class="maint-title">Replace water filter</div>
+              <div class="maint-device">LG Refrigerator · Due May 28, 2026</div>
+            </div>
+            <span class="dsc-badge badge-orange" style="margin:0;">Due in 3 weeks</span>
+            <button class="maint-action">Order part</button>
+          </div>
+          <div class="maint-item">
+            <div class="maint-icon" style="background:#fef2f2;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#ef4444" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <div class="maint-info">
+              <div class="maint-title">Clean vacuum filter</div>
+              <div class="maint-device">Dyson V8 Animal · Due in 15 days</div>
+            </div>
+            <span class="dsc-badge badge-red" style="margin:0;">Overdue</span>
+            <button class="maint-action">View guide</button>
+          </div>
+          <div class="maint-item">
+            <div class="maint-icon" style="background:#e5f7ed;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="#16a34a" stroke-width="1.4"/></svg>
+            </div>
+            <div class="maint-info">
+              <div class="maint-title">Dishwasher deep clean</div>
+              <div class="maint-device">Bosch SHEM3AY52N · Due August 2026</div>
+            </div>
+            <span class="dsc-badge badge-green" style="margin:0;">On track</span>
+            <button class="maint-action">View guide</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ -->
+<!-- PAGE: ADD DEVICE FLOW               -->
+<!-- ═══════════════════════════════════ -->
+<div class="page" id="page-add-device">
+  <nav class="topnav">
+    <div class="nav-logo" onclick="goHome()">
+      <div class="nav-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M3 9.5L10 4l7 5.5V17a.8.8 0 01-.8.8H13v-4a3 3 0 00-6 0v4H3.8A.8.8 0 013 17V9.5z" fill="white" opacity="0.9"/><path d="M7.5 5.5c1.2-1.2 3.3-1.2 4.5 0" stroke="white" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.65"/><circle cx="10" cy="5.8" r="0.9" fill="white" opacity="0.85"/></svg>
+      </div>
+      <span class="nav-logo-text">Dwellio</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-link" onclick="showPage('page-dashboard')">← Back to library</span>
+    </div>
+  </nav>
+  <div class="add-device-wrap">
+    <div class="add-device-sidebar">
+      <h3>Add a device</h3>
+      <p>Tell us about your product and we'll set everything up — manual, warranty tracking, and maintenance schedule.</p>
+      <div class="steps-list">
+        <div class="step-item" id="step-indicator-1">
+          <div class="step-circle current" id="step-circle-1">1</div>
+          <div class="step-label current" id="step-label-1">Product category</div>
+        </div>
+        <div class="step-item" id="step-indicator-2">
+          <div class="step-circle" id="step-circle-2">2</div>
+          <div class="step-label" id="step-label-2">Device details</div>
+        </div>
+        <div class="step-item" id="step-indicator-3">
+          <div class="step-circle" id="step-circle-3">3</div>
+          <div class="step-label" id="step-label-3">Purchase & warranty</div>
+        </div>
+        <div class="step-item" id="step-indicator-4">
+          <div class="step-circle" id="step-circle-4">4</div>
+          <div class="step-label" id="step-label-4">Confirm & save</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="add-device-main">
+
+      <!-- STEP 1: Category -->
+      <div class="add-device-form" id="add-step-1">
+        <h2>What type of product is it?</h2>
+        <p>Choose the category that best fits your device. This helps us find the right manual and set up accurate maintenance reminders.</p>
+
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <div class="chips">
+            <button class="chip selected" onclick="selectChip(this)">Major Appliance</button>
+            <button class="chip" onclick="selectChip(this)">Small Appliance</button>
+            <button class="chip" onclick="selectChip(this)">Electronics</button>
+            <button class="chip" onclick="selectChip(this)">HVAC</button>
+            <button class="chip" onclick="selectChip(this)">Plumbing</button>
+            <button class="chip" onclick="selectChip(this)">Garden & Outdoor</button>
+            <button class="chip" onclick="selectChip(this)">Power Tools</button>
+            <button class="chip" onclick="selectChip(this)">Smart Home</button>
+            <button class="chip" onclick="selectChip(this)">Other</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:24px;">
+          <label class="form-label">Where is this device located?</label>
+          <div class="chips">
+            <button class="chip selected" onclick="selectChip(this)">Kitchen</button>
+            <button class="chip" onclick="selectChip(this)">Living Room</button>
+            <button class="chip" onclick="selectChip(this)">Bedroom</button>
+            <button class="chip" onclick="selectChip(this)">Bathroom</button>
+            <button class="chip" onclick="selectChip(this)">Laundry</button>
+            <button class="chip" onclick="selectChip(this)">Garage</button>
+            <button class="chip" onclick="selectChip(this)">Garden</button>
+            <button class="chip" onclick="selectChip(this)">Office</button>
+          </div>
+        </div>
+
+        <div class="form-nav">
+          <button class="btn-back" onclick="showPage('page-dashboard')">Cancel</button>
+          <button class="btn-next" onclick="goToStep(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Device details -->
+      <div class="add-device-form" id="add-step-2" style="display:none;">
+        <h2>Tell us about your device</h2>
+        <p>Fill in as much as you know — we'll use this to find your exact manual and set up product-specific AI support.</p>
+
+        <div class="form-group">
+          <label class="form-label">Brand</label>
+          <select class="form-select">
+            <option value="">Select a brand...</option>
+            <option selected>LG</option>
+            <option>Samsung</option>
+            <option>Bosch</option>
+            <option>Dyson</option>
+            <option>Miele</option>
+            <option>Whirlpool</option>
+            <option>GE</option>
+            <option>Siemens</option>
+            <option>AEG</option>
+            <option>Hotpoint</option>
+            <option>Indesit</option>
+            <option>Neff</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Product type</label>
+          <select class="form-select">
+            <option value="">Select type...</option>
+            <option selected>Refrigerator / Fridge Freezer</option>
+            <option>Washing Machine</option>
+            <option>Dishwasher</option>
+            <option>Tumble Dryer</option>
+            <option>Oven / Cooker</option>
+            <option>Microwave</option>
+            <option>Vacuum Cleaner</option>
+            <option>Air Fryer</option>
+            <option>Coffee Machine</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Model name <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <input class="form-input" type="text" placeholder="e.g. French Door Refrigerator" value="French Door Refrigerator"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Model number <span style="color:#bbb;font-weight:400;">(optional but recommended)</span></label>
+          <input class="form-input" type="text" placeholder="e.g. LFXS26973 — usually found on a sticker inside the door" value="LFXS26973"/>
+          <div class="form-hint">Usually found on a label inside the door, on the back, or underneath the device.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Serial number <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <input class="form-input" type="text" placeholder="e.g. 204KRBR12345"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nickname <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <input class="form-input" type="text" placeholder="e.g. Kitchen Fridge, Upstairs TV"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Add a photo <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <div class="photo-upload">
+            <div class="photo-upload-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#6b7280" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="photo-upload-text">Upload a photo</div>
+            <div class="photo-upload-sub">PNG, JPG up to 10MB</div>
+          </div>
+        </div>
+
+        <div class="form-nav">
+          <button class="btn-back" onclick="goToStep(1)">← Back</button>
+          <button class="btn-next" onclick="goToStep(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Purchase & warranty -->
+      <div class="add-device-form" id="add-step-3" style="display:none;">
+        <h2>Purchase & warranty details</h2>
+        <p>This helps us track your warranty status and send you reminders before it expires. All optional but very useful.</p>
+
+        <div class="form-group">
+          <label class="form-label">Purchase date <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <input class="form-input" type="date" value="2024-05-10"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Where did you buy it? <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <select class="form-select">
+            <option value="">Select retailer...</option>
+            <option selected>John Lewis</option>
+            <option>Currys</option>
+            <option>Amazon</option>
+            <option>Argos</option>
+            <option>AO.com</option>
+            <option>Manufacturer direct</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Purchase price <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <input class="form-input" type="text" placeholder="e.g. £899.00"/>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Warranty type</label>
+            <select class="form-select">
+              <option>Standard manufacturer</option>
+              <option>Extended warranty</option>
+              <option>Retailer warranty</option>
+              <option>No warranty</option>
+              <option>Unknown</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Warranty length</label>
+            <select class="form-select">
+              <option>1 year</option>
+              <option selected>2 years</option>
+              <option>3 years</option>
+              <option>5 years</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Upload proof of purchase <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <div class="photo-upload">
+            <div class="photo-upload-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#6b7280" stroke-width="1.6" fill="none"/><path d="M14 2v6h6M12 12v6M9 15l3-3 3 3" stroke="#6b7280" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="photo-upload-text">Upload receipt or invoice</div>
+            <div class="photo-upload-sub">PDF, PNG, JPG up to 10MB</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Any notes? <span style="color:#bbb;font-weight:400;">(optional)</span></label>
+          <textarea class="form-input" rows="3" placeholder="e.g. Bought second hand, has a small dent on the left side..." style="resize:vertical;"></textarea>
+        </div>
+
+        <div class="form-nav">
+          <button class="btn-back" onclick="goToStep(2)">← Back</button>
+          <button class="btn-next" onclick="goToStep(4)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Confirm -->
+      <div class="add-device-form" id="add-step-4" style="display:none;">
+        <h2>Confirm your device</h2>
+        <p>Everything look right? Once you save, Dwellio will set up your manual, warranty tracking, and maintenance schedule automatically.</p>
+
+        <div style="background:var(--gray-light);border-radius:14px;padding:20px 24px;margin-bottom:24px;">
+          <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;">Device summary</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;">Category</div><div style="font-size:14px;font-weight:600;">Major Appliance</div></div>
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;">Location</div><div style="font-size:14px;font-weight:600;">Kitchen</div></div>
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;">Brand</div><div style="font-size:14px;font-weight:600;">LG</div></div>
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;">Type</div><div style="font-size:14px;font-weight:600;">Refrigerator</div></div>
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;">Model number</div><div style="font-size:14px;font-weight:600;">LFXS26973</div></div>
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;">Purchased</div><div style="font-size:14px;font-weight:600;">May 10, 2024</div></div>
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;">Retailer</div><div style="font-size:14px;font-weight:600;">John Lewis</div></div>
+            <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;">Warranty</div><div style="font-size:14px;font-weight:600;">2 years · Expires May 2026</div></div>
+          </div>
+        </div>
+
+        <div style="background:#e5f7ed;border:1px solid #bbf0d4;border-radius:12px;padding:16px 18px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start;">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" style="flex-shrink:0;margin-top:1px;"><path d="M9 12l2 2 4-4" stroke="#16a34a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="10" r="8" stroke="#16a34a" stroke-width="1.4"/></svg>
+          <div style="font-size:13px;color:#14532d;line-height:1.6;"><strong>Dwellio found your manual.</strong> We located the official LG LFXS26973 documentation and will set up your maintenance schedule automatically.</div>
+        </div>
+
+        <div class="form-nav">
+          <button class="btn-back" onclick="goToStep(3)">← Back</button>
+          <button class="btn-next green" onclick="showSuccess()">Save device ✓</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="add-device-form" id="add-success" style="display:none;">
+        <div class="success-wrap">
+          <div class="success-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M8 16l5 5 11-11" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="success-title">Device added!</div>
+          <div class="success-sub">Your LG Refrigerator LFXS26973 is now in your library. We've loaded your manual, set up warranty tracking, and scheduled maintenance reminders.</div>
+          <div class="success-card">
+            <svg viewBox="0 0 60 80" fill="none" width="40" height="52"><rect x="5" y="3" width="50" height="74" rx="4" fill="#c8cdd6" stroke="#a0a8b5" stroke-width="1"/><rect x="5" y="3" width="50" height="40" rx="4" fill="#d8dde6" stroke="#a0a8b5" stroke-width="1"/><rect x="6" y="41" width="48" height="1.2" fill="#a0a8b5"/><rect x="43" y="10" width="4" height="18" rx="1.5" fill="#8a9ab0"/><rect x="43" y="46" width="4" height="18" rx="1.5" fill="#8a9ab0"/></svg>
+            <div>
+              <div style="font-size:15px;font-weight:700;color:var(--text);">LG Refrigerator</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">LFXS26973 · Kitchen</div>
+              <span class="dsc-badge badge-green" style="margin-top:6px;display:inline-block;">Warranty: Active until May 2026</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn-next green" onclick="showPage('page-dashboard')">Go to my library</button>
+            <button class="btn-back" onclick="resetAddDevice()">Add another device</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function goHome() {
+    window.location.href = 'dwellio_website.html';
+  }
+
+  function selectChip(el) {
+    el.closest('.chips').querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  let currentStep = 1;
+
+  function goToStep(n) {
+    // Hide all steps
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('add-step-' + i);
+      if (el) el.style.display = 'none';
+      const circle = document.getElementById('step-circle-' + i);
+      const label = document.getElementById('step-label-' + i);
+      if (circle && label) {
+        circle.className = 'step-circle' + (i < n ? ' done' : '');
+        label.className = 'step-label' + (i < n ? ' done' : '');
+        if (i < n) circle.innerHTML = '✓';
+        else circle.innerHTML = i;
+      }
+    }
+    // Show current step
+    const target = document.getElementById('add-step-' + n);
+    if (target) target.style.display = 'block';
+
+    // Mark current
+    const cc = document.getElementById('step-circle-' + n);
+    const cl = document.getElementById('step-label-' + n);
+    if (cc) cc.className = 'step-circle current';
+    if (cl) cl.className = 'step-label current';
+
+    currentStep = n;
+    window.scrollTo(0, 0);
+  }
+
+  function showSuccess() {
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('add-step-' + i);
+      if (el) el.style.display = 'none';
+      const circle = document.getElementById('step-circle-' + i);
+      const label = document.getElementById('step-label-' + i);
+      if (circle && label) {
+        circle.className = 'step-circle done';
+        circle.innerHTML = '✓';
+        label.className = 'step-label done';
+      }
+    }
+    document.getElementById('add-success').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  function resetAddDevice() {
+    document.getElementById('add-success').style.display = 'none';
+    goToStep(1);
+  }
+</script>
+</body>
+</html>
