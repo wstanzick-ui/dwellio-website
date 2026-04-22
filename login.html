@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dwellio — Log in or Sign up</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1b3f7c;
+      --navy-hover: #16336a;
+      --green: #3ecf82;
+      --white: #ffffff;
+      --bg: #f6f7f9;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.3px;
+    }
+
+    /* ── Page ── */
+    .page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 420px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 14px 16px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .tab.active {
+      color: var(--navy);
+      border-bottom-color: var(--navy);
+    }
+
+    /* ── Form body ── */
+    .form-body {
+      padding: 28px 28px 24px;
+    }
+
+    .form-heading {
+      font-family: 'Instrument Serif', serif;
+      font-size: 26px;
+      color: var(--text);
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .form { display: flex; flex-direction: column; gap: 14px; }
+
+    .row-two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(27, 63, 124, 0.08);
+    }
+
+    input.invalid { border-color: var(--error); }
+
+    .forgot-link {
+      font-size: 13px;
+      color: var(--navy);
+      text-decoration: none;
+      align-self: flex-end;
+      margin-top: -6px;
+    }
+
+    .forgot-link:hover { text-decoration: underline; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 4px;
+    }
+
+    .btn-submit:hover { background: var(--navy-hover); }
+    .btn-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .error-msg {
+      font-size: 13px;
+      color: var(--error);
+      background: var(--error-bg);
+      border: 1px solid #fecaca;
+      border-radius: 7px;
+      padding: 10px 13px;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+
+    .success-msg {
+      font-size: 13px;
+      color: #065f46;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 7px;
+      padding: 10px 13px;
+      display: none;
+      line-height: 1.5;
+    }
+
+    .success-msg.visible { display: block; }
+
+    @media (max-width: 480px) {
+      .form-body { padding: 22px 20px 20px; }
+      .row-two { grid-template-columns: 1fr; gap: 14px; }
+      .form-heading { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="logo">
+      <svg class="logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="8" fill="#1b3f7c"/>
+        <path d="M18 8L7 17h3v10h6v-6h4v6h6V17h3L18 8z" fill="white"/>
+        <path d="M14 10.5a5.5 5.5 0 0 1 8 0" stroke="#3ecf82" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M11.5 8a9 9 0 0 1 13 0" stroke="#3ecf82" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="logo-text">Dwellio</span>
+    </a>
+  </nav>
+
+  <main class="page">
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" id="tab-login" onclick="switchTab('login')">Log in</button>
+        <button class="tab" id="tab-signup" onclick="switchTab('signup')">Sign up</button>
+      </div>
+
+      <div class="form-body">
+        <h1 class="form-heading" id="form-heading">Welcome back</h1>
+
+        <div class="success-msg" id="success-msg"></div>
+        <div class="error-msg" id="error-msg"></div>
+
+        <!-- Login form -->
+        <form class="form" id="login-form" onsubmit="handleLogin(event)" novalidate>
+          <div class="field">
+            <label for="login-email">Email address</label>
+            <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password" required />
+          </div>
+          <a href="#" class="forgot-link" onclick="handleForgotPassword(event)">Forgot password?</a>
+          <button type="submit" class="btn-submit" id="login-btn">Log in</button>
+        </form>
+
+        <!-- Signup form (hidden by default) -->
+        <form class="form" id="signup-form" onsubmit="handleSignup(event)" novalidate style="display:none">
+          <div class="row-two">
+            <div class="field">
+              <label for="signup-first">First name</label>
+              <input type="text" id="signup-first" placeholder="Jane" autocomplete="given-name" required />
+            </div>
+            <div class="field">
+              <label for="signup-last">Last name</label>
+              <input type="text" id="signup-last" placeholder="Smith" autocomplete="family-name" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="signup-email">Email address</label>
+            <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+          <div class="field">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" placeholder="At least 8 characters" autocomplete="new-password" required />
+          </div>
+          <div class="field">
+            <label for="signup-confirm">Confirm password</label>
+            <input type="password" id="signup-confirm" placeholder="Repeat password" autocomplete="new-password" required />
+          </div>
+          <button type="submit" class="btn-submit" id="signup-btn">Create account</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://wkogxmvxnvojmjukzcgv.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_0WLpvKVusDJPUWi_c-i2-A__ENKfTMp';
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentTab = 'login';
+
+    // ── On load: redirect if already logged in ──────────────────────────────
+    (function init() {
+      const token = localStorage.getItem('dwellio_token');
+      if (token) {
+        window.location.href = 'library.html';
+      }
+    })();
+
+    // ── Tab switching ────────────────────────────────────────────────────────
+    function switchTab(tab) {
+      currentTab = tab;
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+      document.getElementById('login-form').style.display = tab === 'login' ? 'flex' : 'none';
+      document.getElementById('signup-form').style.display = tab === 'signup' ? 'flex' : 'none';
+      document.getElementById('form-heading').textContent = tab === 'login' ? 'Welcome back' : 'Create your account';
+      clearMessages();
+    }
+
+    // ── Messages ─────────────────────────────────────────────────────────────
+    function showError(msg) {
+      const el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.classList.add('visible');
+      document.getElementById('success-msg').classList.remove('visible');
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById('success-msg');
+      el.textContent = msg;
+      el.classList.add('visible');
+      document.getElementById('error-msg').classList.remove('visible');
+    }
+
+    function clearMessages() {
+      document.getElementById('error-msg').classList.remove('visible');
+      document.getElementById('success-msg').classList.remove('visible');
+    }
+
+    function friendlyError(msg) {
+      if (!msg) return 'Something went wrong. Please try again.';
+      const m = msg.toLowerCase();
+      if (m.includes('invalid login credentials') || m.includes('invalid credentials')) {
+        return 'Incorrect email or password.';
+      }
+      if (m.includes('user already registered') || m.includes('already exists')) {
+        return 'An account with this email already exists. Try logging in instead.';
+      }
+      if (m.includes('password should be at least 6') || m.includes('password must be at least')) {
+        return 'Password must be at least 8 characters.';
+      }
+      if (m.includes('email not confirmed')) {
+        return 'Please confirm your email address first, then log in.';
+      }
+      if (m.includes('rate limit')) {
+        return 'Too many attempts. Please wait a moment and try again.';
+      }
+      return msg;
+    }
+
+    // ── Login ─────────────────────────────────────────────────────────────────
+    async function handleLogin(e) {
+      e.preventDefault();
+      clearMessages();
+
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('login-btn');
+
+      if (!email || !password) {
+        showError('Please enter your email and password.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Logging in…';
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          showError(friendlyError(error.message));
+          return;
+        }
+
+        const user = data.user;
+        const session = data.session;
+        const meta = user.user_metadata || {};
+
+        localStorage.setItem('dwellio_token', session.access_token);
+        localStorage.setItem('dwellio_user', JSON.stringify({
+          id: user.id,
+          email: user.email,
+          full_name: ((meta.first_name || '') + ' ' + (meta.last_name || '')).trim() || user.email
+        }));
+
+        window.location.href = 'library.html';
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Log in';
+      }
+    }
+
+    // ── Signup ────────────────────────────────────────────────────────────────
+    async function handleSignup(e) {
+      e.preventDefault();
+      clearMessages();
+
+      const firstName = document.getElementById('signup-first').value.trim();
+      const lastName = document.getElementById('signup-last').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const confirm = document.getElementById('signup-confirm').value;
+      const btn = document.getElementById('signup-btn');
+
+      if (!firstName || !lastName) {
+        showError('Please enter your first and last name.');
+        return;
+      }
+      if (!email) {
+        showError('Please enter your email address.');
+        return;
+      }
+      if (!password) {
+        showError('Please enter a password.');
+        return;
+      }
+      if (password.length < 8) {
+        showError('Password must be at least 8 characters.');
+        return;
+      }
+      if (password !== confirm) {
+        showError('Passwords do not match.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Creating account…';
+
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { first_name: firstName, last_name: lastName }
+          }
+        });
+
+        if (error) {
+          showError(friendlyError(error.message));
+          return;
+        }
+
+        showSuccess('Check your email to confirm your account, then log in below.');
+        switchTab('login');
+        document.getElementById('login-email').value = email;
+      } catch (err) {
+        showError('Something went wrong. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Create account';
+      }
+    }
+
+    // ── Forgot password ───────────────────────────────────────────────────────
+    function handleForgotPassword(e) {
+      e.preventDefault();
+      alert('Password reset coming soon. Please contact support for now.');
+    }
+  </script>
+</body>
+</html>

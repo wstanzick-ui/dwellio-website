@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dwellio — My Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1b3f7c;
+      --navy-hover: #16336a;
+      --navy-light: #eef2ff;
+      --green: #3ecf82;
+      --white: #ffffff;
+      --bg: #f6f7f9;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --error: #dc2626;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon { width: 36px; height: 36px; flex-shrink: 0; }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-user {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .nav-user span { color: var(--muted); font-weight: 400; }
+
+    .btn-logout {
+      padding: 7px 14px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .btn-logout:hover { border-color: var(--text); color: var(--text); }
+
+    /* ── Page body ── */
+    .page {
+      flex: 1;
+      max-width: 1060px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 40px 24px 60px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .page-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: 34px;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .btn-add-appliance {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 18px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .btn-add-appliance:hover { background: var(--navy-hover); }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+      transform: translateY(-2px);
+    }
+
+    .card-brand {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--navy);
+    }
+
+    .card-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+    }
+
+    .card-model {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .card-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      background: var(--navy-light);
+      color: var(--navy);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn-doc {
+      flex: 1;
+      padding: 8px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-doc:hover { background: var(--navy-light); border-color: var(--navy); color: var(--navy); }
+
+    .btn-delete-card {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 26px;
+      height: 26px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      line-height: 1;
+    }
+
+    .btn-delete-card:hover {
+      background: #fee2e2;
+      border-color: #fecaca;
+      color: var(--error);
+    }
+
+    /* ── Skeleton ── */
+    .skeleton-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .skel {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 5px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skel-sm { height: 10px; width: 50px; }
+    .skel-md { height: 14px; width: 100%; }
+    .skel-lg { height: 14px; width: 75%; }
+    .skel-pill { height: 20px; width: 80px; border-radius: 999px; }
+    .skel-btn { height: 34px; width: 100%; }
+
+    /* ── Empty state ── */
+    .empty-state {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 72px 24px;
+    }
+
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--navy-light);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .empty-icon svg { width: 32px; height: 32px; }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .empty-sub {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 300px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 640px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .modal-title-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 3px;
+    }
+
+    .modal-appliance-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .btn-modal-close {
+      width: 32px;
+      height: 32px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: 18px;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-modal-close:hover { background: #f0f0f0; color: var(--text); }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .modal-support-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 14px;
+      background: var(--navy-light);
+      color: var(--navy);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 20px;
+      transition: background 0.15s;
+    }
+
+    .modal-support-link:hover { background: #dde4f7; }
+
+    .modal-text {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text);
+      white-space: pre-wrap;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 26px; }
+      .nav-user span { display: none; }
+    }
+
+    @media (max-width: 400px) {
+      .nav-user { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="logo">
+      <svg class="logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="8" fill="#1b3f7c"/>
+        <path d="M18 8L7 17h3v10h6v-6h4v6h6V17h3L18 8z" fill="white"/>
+        <path d="M14 10.5a5.5 5.5 0 0 1 8 0" stroke="#3ecf82" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        <path d="M11.5 8a9 9 0 0 1 13 0" stroke="#3ecf82" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="logo-text">Dwellio</span>
+    </a>
+    <div class="nav-right">
+      <div class="nav-user" id="nav-user"></div>
+      <button class="btn-logout" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">My Library</h1>
+        <p class="page-subtitle">Your appliances, manuals and warranties in one place</p>
+      </div>
+      <a href="add-appliance.html" class="btn-add-appliance">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Add appliance
+      </a>
+    </div>
+
+    <div class="grid" id="appliance-grid">
+      <!-- Skeleton placeholders while loading -->
+      <div class="skeleton-card">
+        <div class="skel skel-sm"></div>
+        <div class="skel skel-md"></div>
+        <div class="skel skel-lg"></div>
+        <div class="skel skel-pill"></div>
+        <div class="skel skel-btn"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skel skel-sm"></div>
+        <div class="skel skel-md"></div>
+        <div class="skel skel-lg"></div>
+        <div class="skel skel-pill"></div>
+        <div class="skel skel-btn"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skel skel-sm"></div>
+        <div class="skel skel-md"></div>
+        <div class="skel skel-lg"></div>
+        <div class="skel skel-pill"></div>
+        <div class="skel skel-btn"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Manual Modal -->
+  <div class="modal-overlay" id="manual-modal" onclick="closeModal('manual-modal', event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title-label">Manual</div>
+          <div class="modal-appliance-name" id="manual-modal-name"></div>
+        </div>
+        <button class="btn-modal-close" onclick="closeModalDirect('manual-modal')">×</button>
+      </div>
+      <div class="modal-body">
+        <a id="manual-modal-link" class="modal-support-link" href="#" target="_blank" rel="noopener" style="display:none">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 11L11 2M11 2H6M11 2v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Official support page
+        </a>
+        <div class="modal-text" id="manual-modal-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warranty Modal -->
+  <div class="modal-overlay" id="warranty-modal" onclick="closeModal('warranty-modal', event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title-label">Warranty</div>
+          <div class="modal-appliance-name" id="warranty-modal-name"></div>
+        </div>
+        <button class="btn-modal-close" onclick="closeModalDirect('warranty-modal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-text" id="warranty-modal-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const RAILWAY_URL = 'https://dwellio-prototype-production.up.railway.app';
+
+    let token = localStorage.getItem('dwellio_token');
+    let user = JSON.parse(localStorage.getItem('dwellio_user') || 'null');
+
+    // ── Auth guard ────────────────────────────────────────────────────────────
+    if (!token) {
+      window.location.href = 'login.html';
+    }
+
+    // ── Set user name in nav ──────────────────────────────────────────────────
+    (function initNav() {
+      if (!user) return;
+      const firstName = (user.full_name || '').split(' ')[0] || user.email;
+      document.getElementById('nav-user').innerHTML =
+        `${escHtml(firstName)} <span>· My Library</span>`;
+    })();
+
+    // ── Logout ────────────────────────────────────────────────────────────────
+    function logout() {
+      localStorage.removeItem('dwellio_token');
+      localStorage.removeItem('dwellio_user');
+      window.location.href = 'index.html';
+    }
+
+    // ── Load appliances ───────────────────────────────────────────────────────
+    async function loadAppliances() {
+      try {
+        const res = await fetch(`${RAILWAY_URL}/appliances`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (res.status === 401) {
+          logout();
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error('Server error');
+        }
+
+        const appliances = await res.json();
+        renderAppliances(appliances);
+      } catch (err) {
+        document.getElementById('appliance-grid').innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:48px 24px;color:var(--muted);font-size:14px;">
+            Something went wrong loading your library. Please try again.
+          </div>`;
+      }
+    }
+
+    loadAppliances();
+
+    // ── Render ────────────────────────────────────────────────────────────────
+    function renderAppliances(appliances) {
+      const grid = document.getElementById('appliance-grid');
+
+      if (!appliances || appliances.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 4L3 14h3v13h7v-7h6v7h7V14h3L16 4z" fill="#1b3f7c" opacity="0.3"/>
+                <path d="M12 9.5a5 5 0 0 1 8 0" stroke="#1b3f7c" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+                <path d="M9 7a9.5 9.5 0 0 1 14 0" stroke="#1b3f7c" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+              </svg>
+            </div>
+            <div class="empty-title">No appliances yet</div>
+            <p class="empty-sub">Add your first appliance to get started — we'll find the manual and warranty automatically.</p>
+            <a href="add-appliance.html" class="btn-add-appliance">Add your first appliance</a>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = appliances.map(a => `
+        <div class="card" id="card-${escAttr(a.id)}">
+          <button class="btn-delete-card" title="Delete appliance"
+            onclick="deleteAppliance(event, '${escAttr(a.id)}', '${escAttr(a.full_name || a.brand + ' ' + a.model)}')">×</button>
+          <div class="card-brand">${escHtml(a.brand)}</div>
+          <div class="card-name">${escHtml(a.full_name || (a.brand + ' ' + a.model))}</div>
+          <div class="card-model">${escHtml(a.model)}</div>
+          ${a.product_type ? `<div class="card-badge">${escHtml(a.product_type)}</div>` : ''}
+          <div class="card-actions">
+            <button class="btn-doc" onclick="openManual(${JSON.stringify(a)})">View Manual</button>
+            <button class="btn-doc" onclick="openWarranty(${JSON.stringify(a)})">View Warranty</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── Delete ────────────────────────────────────────────────────────────────
+    async function deleteAppliance(e, id, name) {
+      e.stopPropagation();
+      if (!confirm(`Delete ${name}? This cannot be undone.`)) return;
+
+      const card = document.getElementById('card-' + id);
+      if (card) {
+        card.style.opacity = '0.4';
+        card.style.pointerEvents = 'none';
+      }
+
+      try {
+        const res = await fetch(`${RAILWAY_URL}/appliances/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        if (res.status === 401) { logout(); return; }
+
+        if (res.ok) {
+          if (card) card.remove();
+          // Check if grid is now empty
+          const grid = document.getElementById('appliance-grid');
+          if (grid.querySelectorAll('.card').length === 0) {
+            renderAppliances([]);
+          }
+        } else {
+          if (card) { card.style.opacity = '1'; card.style.pointerEvents = ''; }
+          alert('Could not delete appliance. Please try again.');
+        }
+      } catch {
+        if (card) { card.style.opacity = '1'; card.style.pointerEvents = ''; }
+        alert('Something went wrong. Please try again.');
+      }
+    }
+
+    // ── Modals ────────────────────────────────────────────────────────────────
+    function openManual(a) {
+      document.getElementById('manual-modal-name').textContent = a.full_name || (a.brand + ' ' + a.model);
+      document.getElementById('manual-modal-text').textContent = a.manual_text || 'No manual available for this appliance.';
+
+      const link = document.getElementById('manual-modal-link');
+      if (a.manual_url && a.manual_url.startsWith('http')) {
+        link.href = a.manual_url;
+        link.style.display = 'inline-flex';
+      } else {
+        link.style.display = 'none';
+      }
+
+      document.getElementById('manual-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function openWarranty(a) {
+      document.getElementById('warranty-modal-name').textContent = a.full_name || (a.brand + ' ' + a.model);
+      document.getElementById('warranty-modal-text').textContent = a.warranty_text || 'No warranty information available for this appliance.';
+      document.getElementById('warranty-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(id, e) {
+      if (e.target === e.currentTarget) closeModalDirect(id);
+    }
+
+    function closeModalDirect(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeModalDirect('manual-modal');
+        closeModalDirect('warranty-modal');
+      }
+    });
+
+    // ── Utils ─────────────────────────────────────────────────────────────────
+    function escHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function escAttr(str) {
+      return String(str || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+  </script>
+</body>
+</html>
