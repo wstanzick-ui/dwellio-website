@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dwellio — Log in or Sign up</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -288,11 +287,15 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
     const SUPABASE_URL = 'https://wkogxmvxnvojmjukzcgv.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_0WLpvKVusDJPUWi_c-i2-A__ENKfTMp';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    function getSupabase() {
+      if (!window.supabase) throw new Error('Supabase failed to load. Please refresh the page.');
+      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
 
     let currentTab = 'login';
 
@@ -374,7 +377,7 @@
       btn.textContent = 'Logging in…';
 
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await getSupabase().auth.signInWithPassword({ email, password });
 
         if (error) {
           showError(friendlyError(error.message));
@@ -438,7 +441,7 @@
       btn.textContent = 'Creating account…';
 
       try {
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await getSupabase().auth.signUp({
           email,
           password,
           options: {
